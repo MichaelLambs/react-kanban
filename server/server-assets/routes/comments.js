@@ -17,7 +17,7 @@ router.post('/api/boards/:boardId/lists/:listId/tasks/:taskId/comments', (req, r
     req.body.boardId = req.params.boardId;
     Comments.create(req.body)
         .then(comment => {
-            res.send(comment);
+            return res.send(comment);
         })
         .catch(next)
 });

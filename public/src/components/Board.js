@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { getBoard, getLists } from '../actions/data-actions'
+import { getBoard, getLists, addList } from '../actions/data-actions'
+
+import { Link } from 'react-router-dom'
 
 import Navbar from '../components/Navbar'
 import List from '../components/List'
@@ -19,9 +21,16 @@ class Board extends Component {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-12">
-                        {this.props.board ?
-                        <h1>{this.props.board.name}</h1> :
-                        <h1>Loading Lists</h1>}
+                        <div className="flexor vert-center space-between">
+                            <div>
+                                {this.props.board ?
+                                <h1>{this.props.board.name}</h1> :
+                                <h1>Loading Lists</h1>}
+                            </div>
+                            <div>
+                                <Link to="/boards"><h5>Back to Boards</h5></Link>
+                            </div>
+                        </div>
                     </div>
                     {this.props.lists ?
                     this.props.lists.map(list  => (
@@ -31,8 +40,18 @@ class Board extends Component {
                             </div>
                         </div>
                     )):
-                        <div></div>
+                        <div className="col-md-4"><p>No Lists</p></div>
                     }
+                    <div className="col-md-12">
+                        <form className="flexor vert-center space-between" onSubmit={(event) => this.props.addList(this.props.board._id, event)}>
+                            <div className="form-group width100">
+                                <input className="width100 pad-r" type="text" placeholder="Add List" name="list" required/>
+                            </div>
+                            <div className="form-group">
+                                <button type="submit">Add</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -42,7 +61,7 @@ class Board extends Component {
 
 const mapStateToProps = (state) => ({
     board: state.data.board,
-    lists: state.data.lists
+    lists: state.data.lists || []
   })
   
-  export default connect(mapStateToProps, { getBoard, getLists })(Board);
+  export default connect(mapStateToProps, { getBoard, getLists, addList })(Board);
